@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Redirecting...</title>
-    <script type="text/javascript">
-      const path = window.location.pathname;
-      const search = window.location.search;
-      const hash = window.location.hash;
-
-      // Detect GitHub Pages
-      const isGitHubPages = window.location.hostname.includes("github.io");
-      const repo = "SummitCommunities";
-
-      // Redirect preserving path, query, and hash
-      const basePath = isGitHubPages ? `/${repo}/index.html` : "/index.html";
-      window.location.replace(`${basePath}${path}${search}${hash}`);
-    </script>
-  </head>
-  <body></body>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    const path = window.location.pathname;
+    const search = window.location.search;
+    const hash = window.location.hash;
+    const isGitHubPages = window.location.hostname.includes("github.io");
+    const repo = "SummitCommunities";
+    const basePath = isGitHubPages ? `/${repo}/index.html` : "/index.html";
+    // Remove the repo part from path if it exists, then redirect
+    const redirectPath = path.startsWith(`/${repo}`) ? path.slice(repo.length + 1) : path;
+    window.location.replace(`${basePath}${redirectPath}${search}${hash}`);
+  </script>
+</head>
+<body></body>
 </html>
