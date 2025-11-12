@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Redirecting...</title>
   <script>
-    // Detect if we're on GitHub Pages
-    const repo = "SummitCommunities";
-    const isGitHubPages = window.location.hostname.includes("github.io");
+    (function() {
+      const repo = "SummitCommunities";
+      const hostname = window.location.hostname;
+      const isGHPages = hostname.includes("github.io");
+      const path = window.location.pathname;
 
-    // Get the current path after the repo base
-    const pathParts = window.location.pathname.split('/').filter(Boolean);
+      // If already at index.html, do nothing
+      if (path.endsWith("index.html")) return;
 
-    let redirectPath = "/";
-    if (isGitHubPages) {
-      // Remove the repo name from the path if it's included
-      if (pathParts[0] === repo) pathParts.shift();
-      redirectPath = "/" + pathParts.join("/");
-    }
+      let newPath = path;
 
-    // Keep search and hash
-    const finalUrl = `${isGitHubPages ? "/" + repo : ""}/index.html${redirectPath}${window.location.search}${window.location.hash}`;
-
-    // Only redirect if we're not already on index.html
-    if (!window.location.pathname.endsWith("index.html")) {
-      window.location.replace(finalUrl);
-    }
+      if (isGHPages) {
+        // Remove repo prefix if present
+        const repoPrefix = "/" + repo;
+        if (path.startsWith(repoPrefix)) {
+          newPath = path.slice(repoPrefix.length);
+        }
+        newPath = "/" + newPath.replace(/^\/+/, ""); // ensure single starting slash
+        window.location.replace(`/${repo}/index.html${newPath}${window.location.search}${window.location.hash}`);
+      } else {
+        // Local dev
+        window.location.replace(`/index.html${newPath}${window.location.search}${window.location.hash}`);
+      }
+    })();
   </script>
 </head>
 <body></body>
