@@ -1,0 +1,209 @@
+/* ==========================
+   Sidebar base
+   ========================== */
+.sidebar {
+  width: 70px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.sidebar.expanded {
+  width: 450px;
+  align-items: flex-start;
+}
+
+/* ==========================
+   Hamburger/X Button
+   ========================== */
+.menu-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center vertically */
+  gap: 4px; /* space between lines */
+  padding: 0;
+  z-index: 200;
+}
+
+.menu-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Bars */
+.bar {
+  display: block;
+  height: 2px; /* thinner lines */
+  background-color: #333;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Default lengths */
+.bar.long {
+  width: 100%;
+}
+
+.bar.short {
+  width: 66%; /* 50% shorter than long */
+}
+
+/* Hover: both lines same length and color */
+.menu-btn:hover .bar {
+  width: 100%;
+  background-color: #b88a58;
+}
+
+/* Hamburger → X animation when sidebar is open */
+.menu-btn.open .long {
+  transform: rotate(45deg) translateY(4px);
+  width: 100%;
+}
+
+.menu-btn.open .short {
+  transform: rotate(-45deg) translateY(-4px);
+  width: 100%;
+}
+
+/* ==========================
+   Logo
+   ========================== */
+.sidebar-logo {
+  margin-top: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.sidebar-logo img {
+  width: 80px;  /* increased from 40px to 80px */
+  height: auto;
+  transition: all 0.3s ease;
+}
+
+/* ==========================
+   Menu Items
+   ========================== */
+.sidebar nav {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar.expanded nav ul {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+/* ==========================
+   Menu Items
+   ========================== */
+.sidebar nav ul li a {
+  display: block;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  transition: all 0.3s ease; /* smooth transition for hover & active */
+  margin-left: 110px;
+  position: relative;
+}
+
+/* Hover: add subtle text shadow, no background */
+.sidebar nav ul li a:hover {
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* subtle shadow */
+  transform: translateX(5px); /* optional slight slide effect */
+}
+
+/* Active item: highlighted text only, no background */
+.sidebar nav ul li.active a {
+  color: #b88a58; /* highlight color */
+  font-weight: bold;
+  text-shadow: none;
+  transform: translateX(0); /* reset hover transform */
+}
+
+/* Logo inside menu */
+.sidebar nav ul li.logo-item {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.sidebar nav ul li.logo-item img {
+  width: 300px;  /* increased from 50px to 100px */
+  height: auto;
+  transition: all 0.3s ease;
+  margin-top: 50px;
+}
+
+/* ==========================
+   Main content shift
+   ========================== */
+main.content {
+  margin-left: 70px;
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.expanded ~ main.content {
+  margin-left: 250px;
+}
+
+/* ==========================
+   Sidebar Footer
+   ========================== */
+.sidebar-footer {
+  margin-top: auto; /* push footer to bottom */
+  margin-left: 40px;
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
+  width: 100%;
+  box-sizing: border-box;
+
+  /* Hide by default when sidebar is collapsed */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Show footer when sidebar is expanded */
+.sidebar.expanded .sidebar-footer {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
