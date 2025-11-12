@@ -10,7 +10,7 @@
       const isGHPages = hostname.includes("github.io");
       const path = window.location.pathname;
 
-      // If already at index.html, do nothing
+      // Only redirect if not already at index.html
       if (path.endsWith("index.html")) return;
 
       let newPath = path;
