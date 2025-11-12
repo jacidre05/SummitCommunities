@@ -6,24 +6,31 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import "./Home.css";
 
+// Import images from src — Webpack will hash them
+import BG1 from "./Components/BC.jpg";
+import BG2 from "./Components/ABG.png";
+import BG3 from "./Components/KABG.png";
+import IMG from "./Components/SCLogo.png";
+import Sample from "./Components/Sample.png";
+
 const slides = [
-  { 
-    img: "/images/SCLogo.png", 
+  {
+    img: IMG,
     title: "WELCOME TO\nSUMMIT COMMUNITIES",
-    text: "Our ‘Reach for the Top’ philosophy means we are dedicated to providing clean, quality housing to those who might have previously gone through a challenging time in life. We continuously strive to be the best in the industry.", 
-    bg: "/images/BC.jpg" 
+    text: "Our ‘Reach for the Top’ philosophy means we are dedicated to providing clean, quality housing to those who might have previously gone through a challenging time in life. We continuously strive to be the best in the industry.",
+    bg: BG1,
   },
-  { 
-    img: "/images/SCLogo.png", 
-    title: "TRUSTED BY INVESTORS\nRESIDENTS & COMMUNITIES", 
-    text: "Summit Communities focuses on value-add multifamily opportunities. We transform neglected properties into clean and comfortable communities for working class residents, provide an engaging and fun place to work for our employees and provide above average returns for investors.", 
-    bg: "/images/ABG.png"
+  {
+    img: IMG,
+    title: "TRUSTED BY INVESTORS\nRESIDENTS & COMMUNITIES",
+    text: "Summit Communities focuses on value-add multifamily opportunities. We transform neglected properties into clean and comfortable communities for working class residents, provide an engaging and fun place to work for our employees and provide above average returns for investors.",
+    bg: BG2,
   },
-  { 
-    img: "/images/SCLogo.png", 
-    title: "PROVIDING CAREER OPPORTUNITIES\nIN A FAST GROWING COMPANY ", 
-    text: "We pride ourselves on a providing a familial-like community for our residents. In order to attract and retain employees who are approachable, accepting, and proactive, we’ve created a welcoming culture. In addition to competitive compensation, we offer a place to build a career and truly make an impact on our residents' lives.", 
-    bg: "/images/KABG.png" 
+  {
+    img: IMG,
+    title: "PROVIDING CAREER OPPORTUNITIES\nIN A FAST GROWING COMPANY",
+    text: "We pride ourselves on a providing a familial-like community for our residents. In order to attract and retain employees who are approachable, accepting, and proactive, we’ve created a welcoming culture. In addition to competitive compensation, we offer a place to build a career and truly make an impact on our residents' lives.",
+    bg: BG3,
   },
 ];
 
@@ -66,16 +73,13 @@ const Home: React.FC = () => {
 
       <section className="image-text-section">
         <div className="image-container">
-          <img 
-            src="/images/Sample.png" 
-            alt="Sample" 
-          />
+          <img src={Sample} alt="Sample" />
         </div>
         <div className="text-container">
           <h2>About Our Community</h2>
           <p>
-            Summit Communities is committed to creating modern, sustainable, 
-            and vibrant communities where people can thrive. Join us to explore 
+            Summit Communities is committed to creating modern, sustainable,
+            and vibrant communities where people can thrive. Join us to explore
             opportunities and experience our unique developments.
           </p>
         </div>
