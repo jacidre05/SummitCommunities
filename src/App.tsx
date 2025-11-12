@@ -23,8 +23,7 @@ function App() {
         closeSidebar();
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside, true); // capture phase
+    document.addEventListener("mousedown", handleClickOutside, true);
     return () => document.removeEventListener("mousedown", handleClickOutside, true);
   }, []);
 
@@ -37,8 +36,11 @@ function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isSidebarOpen]);
 
+  // Dynamic basename: use PUBLIC_URL or default to '/'
+  const basename = process.env.PUBLIC_URL || "/";
+
   return (
-    <Router>
+    <Router basename={basename}>
       {/* Sidebar */}
       <div ref={sidebarRef}>
         <Sidebar
@@ -50,108 +52,39 @@ function App() {
 
       {/* Routes */}
       <Routes>
-        {/* Homepage with slider independent of sidebar */}
         <Route
           path="/"
           element={
             <>
-              <Home /> {/* Slider stays full width and independent */}
-              {/* Optional: Homepage content below slider */}
-              <main className="home-content">
-                {/* Your homepage sections */}
-              </main>
+              <Home />
+              <main className="home-content" />
             </>
           }
         />
 
-        {/* Other pages that adjust with sidebar */}
-        <Route
-          path="/AboutUs"
-          element={
-            <main
-              className="content"
-              style={{
-                marginLeft: isSidebarOpen ? 200 : 70,
-                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-              }}
-            >
-              <AboutUs />
-            </main>
-          }
-        />
-        <Route
-          path="/Portfolio"
-          element={
-            <main
-              className="content"
-              style={{
-                marginLeft: isSidebarOpen ? 200 : 70,
-                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-              }}
-            >
-              <Portfolio />
-            </main>
-          }
-        />
-        <Route
-          path="/Careers"
-          element={
-            <main
-              className="content"
-              style={{
-                marginLeft: isSidebarOpen ? 200 : 70,
-                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-              }}
-            >
-              <Careers />
-            </main>
-          }
-        />
-        <Route
-          path="/Videos"
-          element={
-            <main
-              className="content"
-              style={{
-                marginLeft: isSidebarOpen ? 200 : 70,
-                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-              }}
-            >
-              <Videos />
-            </main>
-          }
-        />
-        <Route
-          path="/ContactUs"
-          element={
-            <main
-              className="content"
-              style={{
-                marginLeft: isSidebarOpen ? 200 : 70,
-                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-              }}
-            >
-              <ContactUs />
-            </main>
-          }
-        />
-        <Route
-          path="/Portal"
-          element={
-            <main
-              className="content"
-              style={{
-                marginLeft: isSidebarOpen ? 200 : 70,
-                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-              }}
-            >
-              <Portal />
-            </main>
-          }
-        />
+        {/* Wrapper to reduce repeated style code */}
+        <Route path="/AboutUs" element={<PageWrapper isSidebarOpen={isSidebarOpen}><AboutUs /></PageWrapper>} />
+        <Route path="/Portfolio" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Portfolio /></PageWrapper>} />
+        <Route path="/Careers" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Careers /></PageWrapper>} />
+        <Route path="/Videos" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Videos /></PageWrapper>} />
+        <Route path="/ContactUs" element={<PageWrapper isSidebarOpen={isSidebarOpen}><ContactUs /></PageWrapper>} />
+        <Route path="/Portal" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Portal /></PageWrapper>} />
       </Routes>
     </Router>
   );
 }
+
+// Wrapper component for pages that use sidebar
+const PageWrapper = ({ isSidebarOpen, children }: { isSidebarOpen: boolean; children: React.ReactNode }) => (
+  <main
+    className="content"
+    style={{
+      marginLeft: isSidebarOpen ? 200 : 70,
+      width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
+    }}
+  >
+    {children}
+  </main>
+);
 
 export default App;
