@@ -4,15 +4,27 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script>
-    const path = window.location.pathname;
-    const search = window.location.search;
-    const hash = window.location.hash;
-    const isGitHubPages = window.location.hostname.includes("github.io");
+    // Detect if we're on GitHub Pages
     const repo = "SummitCommunities";
-    const basePath = isGitHubPages ? `/${repo}/index.html` : "/index.html";
-    // Remove the repo part from path if it exists, then redirect
-    const redirectPath = path.startsWith(`/${repo}`) ? path.slice(repo.length + 1) : path;
-    window.location.replace(`${basePath}${redirectPath}${search}${hash}`);
+    const isGitHubPages = window.location.hostname.includes("github.io");
+
+    // Get the current path after the repo base
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+
+    let redirectPath = "/";
+    if (isGitHubPages) {
+      // Remove the repo name from the path if it's included
+      if (pathParts[0] === repo) pathParts.shift();
+      redirectPath = "/" + pathParts.join("/");
+    }
+
+    // Keep search and hash
+    const finalUrl = `${isGitHubPages ? "/" + repo : ""}/index.html${redirectPath}${window.location.search}${window.location.hash}`;
+
+    // Only redirect if we're not already on index.html
+    if (!window.location.pathname.endsWith("index.html")) {
+      window.location.replace(finalUrl);
+    }
   </script>
 </head>
 <body></body>
