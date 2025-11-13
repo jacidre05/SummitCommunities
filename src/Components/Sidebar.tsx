@@ -20,10 +20,11 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
     { name: "Employment", path: "/Careers" },
     { name: "Video Gallery", path: "/Videos" },
     { name: "Contact Us", path: "/ContactUs" },
-    { name: "Tenant Portal", path: "/Portal" },
+    { name: "Tenant Portals", path: "/Portal" },
   ];
 
   useEffect(() => {
+    // Close sidebar when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
       if (!isOpen) return;
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
@@ -35,6 +36,7 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
   }, [isOpen, closeSidebar]);
 
   useEffect(() => {
+    // Mobile swipe detection
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -48,8 +50,10 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
 
     const handleTouchEnd = () => {
       const diffX = touchEndX - touchStartX;
-      if (diffX > 50) toggleSidebar(); // swipe right
-      if (diffX < -50) closeSidebar(); // swipe left
+
+      if (diffX > 50) toggleSidebar(); // Swipe right to open
+      if (diffX < -50) closeSidebar(); // Swipe left to close
+
       touchStartX = 0;
       touchEndX = 0;
     };
@@ -70,6 +74,7 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
       <button className={`menu-btn ${isOpen ? "open" : ""}`} onClick={toggleSidebar}>
         <span className="bar long"></span>
         <span className="bar short"></span>
+        <span className="mobile-label">Menu</span>
       </button>
 
       <nav>
@@ -81,13 +86,9 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
             <li key={item.path} className={location.pathname === item.path ? "active" : ""}>
               <Link
                 to={item.path}
-                onClick={() => {
-                  if (sidebarRef.current) {
-                    sidebarRef.current.classList.remove("expanded"); // trigger CSS animation
-                    setTimeout(() => {
-                      closeSidebar(); // update React state
-                    }, 300); // match CSS transition
-                  }
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent accidental collapse
+                  closeSidebar(); // auto-collapse on mobile and desktop
                 }}
               >
                 {item.name}

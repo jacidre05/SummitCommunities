@@ -8,15 +8,18 @@
     "types": ["vite/client"],
     "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    /* Fix Swiper CSS imports */
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+
+    /* Do not emit JS (Vite handles bundling) */
     "noEmit": true,
     "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
 
-    /* Linting */
+    /* Strict type checking */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
