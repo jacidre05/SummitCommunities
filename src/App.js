@@ -1,6 +1,6 @@
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./Components/Sidebar";
 import Home from "./Pages/Home";
 import AboutUs from "./Pages/AboutUs";
@@ -21,7 +21,7 @@ function App() {
                 closeSidebar();
             }
         };
-        document.addEventListener("mousedown", handleClickOutside, true); // capture phase
+        document.addEventListener("mousedown", handleClickOutside, true);
         return () => document.removeEventListener("mousedown", handleClickOutside, true);
     }, []);
     // Close sidebar on scroll
@@ -33,24 +33,11 @@ function App() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, [isSidebarOpen]);
-    return (_jsxs(Router, { children: [_jsx("div", { ref: sidebarRef, children: _jsx(Sidebar, { isOpen: isSidebarOpen, toggleSidebar: toggleSidebar, closeSidebar: closeSidebar }) }), _jsxs(Routes, { children: [_jsx(Route, { path: "/", element: _jsxs(_Fragment, { children: [_jsx(Home, {}), " ", _jsx("main", { className: "home-content" })] }) }), _jsx(Route, { path: "/AboutUs", element: _jsx("main", { className: "content", style: {
-                                marginLeft: isSidebarOpen ? 200 : 70,
-                                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-                            }, children: _jsx(AboutUs, {}) }) }), _jsx(Route, { path: "/Portfolio", element: _jsx("main", { className: "content", style: {
-                                marginLeft: isSidebarOpen ? 200 : 70,
-                                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-                            }, children: _jsx(Portfolio, {}) }) }), _jsx(Route, { path: "/Careers", element: _jsx("main", { className: "content", style: {
-                                marginLeft: isSidebarOpen ? 200 : 70,
-                                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-                            }, children: _jsx(Careers, {}) }) }), _jsx(Route, { path: "/Videos", element: _jsx("main", { className: "content", style: {
-                                marginLeft: isSidebarOpen ? 200 : 70,
-                                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-                            }, children: _jsx(Videos, {}) }) }), _jsx(Route, { path: "/ContactUs", element: _jsx("main", { className: "content", style: {
-                                marginLeft: isSidebarOpen ? 200 : 70,
-                                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-                            }, children: _jsx(ContactUs, {}) }) }), _jsx(Route, { path: "/Portal", element: _jsx("main", { className: "content", style: {
-                                marginLeft: isSidebarOpen ? 200 : 70,
-                                width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
-                            }, children: _jsx(Portal, {}) }) })] })] }));
+    return (_jsxs(Router, { children: [_jsx("div", { ref: sidebarRef, children: _jsx(Sidebar, { isOpen: isSidebarOpen, toggleSidebar: toggleSidebar, closeSidebar: closeSidebar }) }), _jsxs(Routes, { children: [_jsx(Route, { path: "/", element: _jsx(Home, {}) }), _jsx(Route, { path: "/AboutUs", element: _jsx(PageWrapper, { isSidebarOpen: isSidebarOpen, children: _jsx(AboutUs, {}) }) }), _jsx(Route, { path: "/Portfolio", element: _jsx(PageWrapper, { isSidebarOpen: isSidebarOpen, children: _jsx(Portfolio, {}) }) }), _jsx(Route, { path: "/Careers", element: _jsx(PageWrapper, { isSidebarOpen: isSidebarOpen, children: _jsx(Careers, {}) }) }), _jsx(Route, { path: "/Videos", element: _jsx(PageWrapper, { isSidebarOpen: isSidebarOpen, children: _jsx(Videos, {}) }) }), _jsx(Route, { path: "/ContactUs", element: _jsx(PageWrapper, { isSidebarOpen: isSidebarOpen, children: _jsx(ContactUs, {}) }) }), _jsx(Route, { path: "/Portal", element: _jsx(PageWrapper, { isSidebarOpen: isSidebarOpen, children: _jsx(Portal, {}) }) })] })] }));
 }
+// Wrapper component for pages with sidebar
+const PageWrapper = ({ isSidebarOpen, children, }) => (_jsx("main", { className: "content", style: {
+        marginLeft: isSidebarOpen ? 200 : 70,
+        width: `calc(100% - ${isSidebarOpen ? 200 : 70}px)`,
+    }, children: children }));
 export default App;

@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination, EffectFade } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";
 import "./Home.css";
 
-// Import images from src — Webpack will hash them
+// Import images
 import BG1 from "./Components/BC.jpg";
 import BG2 from "./Components/ABG.png";
 import BG3 from "./Components/KABG.png";
@@ -35,35 +34,99 @@ const slides = [
 ];
 
 const Home: React.FC = () => {
+  const swiperRef = useRef<any>(null);
+  const rafRef = useRef<number | null>(null);
+
+  // Get responsive parallax intensity
+  const getParallaxIntensity = () => {
+    const width = window.innerWidth;
+    if (width >= 1200) return 40; // bg horizontal shift
+    if (width >= 768) return 25;
+    return 15;
+  };
+
+  const getTextParallaxIntensity = () => {
+    const width = window.innerWidth;
+    if (width >= 1200) return 30; // text vertical shift
+    if (width >= 768) return 20;
+    return 10;
+  };
+
+  useEffect(() => {
+    const animateParallax = () => {
+      if (!swiperRef.current) return;
+
+      const bgIntensity = getParallaxIntensity();
+      const textIntensity = getTextParallaxIntensity();
+
+      swiperRef.current.slides.forEach((slideEl: any) => {
+        const bg = slideEl.querySelector(".slide-background") as HTMLElement;
+        const text = slideEl.querySelector(".slide-text-content") as HTMLElement;
+
+        if (bg) {
+          const progress = slideEl.progress as number;
+          const currentTransform = parseFloat(
+            bg.style.transform.replace("translateX(", "").replace("px)", "")
+          ) || 0;
+          const targetTransform = progress * bgIntensity;
+          const newTransform = currentTransform + (targetTransform - currentTransform) * 0.1;
+          bg.style.transform = `translateX(${newTransform}px)`;
+        }
+
+        if (text) {
+          const progress = slideEl.progress as number;
+          const currentY = parseFloat(
+            text.style.transform.replace("translateY(", "").replace("px)", "")
+          ) || 0;
+          const targetY = progress * textIntensity;
+          const newY = currentY + (targetY - currentY) * 0.1;
+          text.style.transform = `translateY(${newY}px)`;
+        }
+      });
+
+      rafRef.current = requestAnimationFrame(animateParallax);
+    };
+
+    rafRef.current = requestAnimationFrame(animateParallax);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   return (
     <>
       <div className="slider-container">
         <Swiper
-          modules={[Autoplay, Pagination, EffectFade]}
-          effect="fade"
+          modules={[Autoplay, Pagination]}
+          speed={800}
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           loop
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
         >
           {slides.map((slide, index) => (
             <SwiperSlide key={index}>
-              <div
-                className="slide-background"
-                style={{ backgroundImage: `url(${slide.bg})` }}
-              >
+              <div className="slide-background-wrapper">
+                <div
+                  className="slide-background"
+                  style={{ backgroundImage: `url(${slide.bg})` }}
+                />
                 <div className="overlay" />
                 <div className="slide-text">
                   <img src={slide.img} alt="Logo" />
-                  <h2>
-                    {slide.title.split("\n").map((line, i) => (
-                      <span key={i}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
-                  </h2>
-                  <div className="slide-separator"></div>
-                  <p>{slide.text}</p>
+                  <div className="slide-text-content">
+                    <h2>
+                      {slide.title.split("\n").map((line, i) => (
+                        <span key={i}>
+                          {line}
+                          <br />
+                        </span>
+                      ))}
+                    </h2>
+                    <div className="slide-separator"></div>
+                    <p>{slide.text}</p>
+                  </div>
                 </div>
               </div>
             </SwiperSlide>

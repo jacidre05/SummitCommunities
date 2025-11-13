@@ -1,17 +1,12 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-const isProduction = process.env.NODE_ENV === 'production'
+export default defineConfig(({ mode }) => {
+  const isProduction = mode === 'production';
+  const basePath = isProduction ? '/SummitCommunities/' : '/';
 
-const basePath = isProduction ? '/SummitCommunities/' : '/'
-
-export default defineConfig({
-  base: basePath,
-  plugins: [
-    react({
-      babel: {
-        plugins: [['babel-plugin-react-compiler']],
-      },
-    }),
-  ],
-})
+  return {
+    base: basePath,
+    plugins: [react()],
+  };
+});

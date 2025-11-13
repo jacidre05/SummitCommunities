@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./Components/Sidebar";
 import Home from "./Pages/Home";
 import AboutUs from "./Pages/AboutUs";
@@ -24,7 +24,8 @@ function App() {
       }
     };
     document.addEventListener("mousedown", handleClickOutside, true);
-    return () => document.removeEventListener("mousedown", handleClickOutside, true);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside, true);
   }, []);
 
   // Close sidebar on scroll
@@ -36,12 +37,8 @@ function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isSidebarOpen]);
 
-  // Dynamic basename: use PUBLIC_URL or default to '/'
-  const basename = process.env.PUBLIC_URL || "/";
-
   return (
-    <Router basename={basename}>
-      {/* Sidebar */}
+    <Router>
       <div ref={sidebarRef}>
         <Sidebar
           isOpen={isSidebarOpen}
@@ -50,32 +47,69 @@ function App() {
         />
       </div>
 
-      {/* Routes */}
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route
-          path="/"
+          path="/AboutUs"
           element={
-            <>
-              <Home />
-              <main className="home-content" />
-            </>
+            <PageWrapper isSidebarOpen={isSidebarOpen}>
+              <AboutUs />
+            </PageWrapper>
           }
         />
-
-        {/* Wrapper to reduce repeated style code */}
-        <Route path="/AboutUs" element={<PageWrapper isSidebarOpen={isSidebarOpen}><AboutUs /></PageWrapper>} />
-        <Route path="/Portfolio" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Portfolio /></PageWrapper>} />
-        <Route path="/Careers" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Careers /></PageWrapper>} />
-        <Route path="/Videos" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Videos /></PageWrapper>} />
-        <Route path="/ContactUs" element={<PageWrapper isSidebarOpen={isSidebarOpen}><ContactUs /></PageWrapper>} />
-        <Route path="/Portal" element={<PageWrapper isSidebarOpen={isSidebarOpen}><Portal /></PageWrapper>} />
+        <Route
+          path="/Portfolio"
+          element={
+            <PageWrapper isSidebarOpen={isSidebarOpen}>
+              <Portfolio />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/Careers"
+          element={
+            <PageWrapper isSidebarOpen={isSidebarOpen}>
+              <Careers />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/Videos"
+          element={
+            <PageWrapper isSidebarOpen={isSidebarOpen}>
+              <Videos />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/ContactUs"
+          element={
+            <PageWrapper isSidebarOpen={isSidebarOpen}>
+              <ContactUs />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/Portal"
+          element={
+            <PageWrapper isSidebarOpen={isSidebarOpen}>
+              <Portal />
+            </PageWrapper>
+          }
+        />
       </Routes>
     </Router>
   );
 }
 
-// Wrapper component for pages that use sidebar
-const PageWrapper = ({ isSidebarOpen, children }: { isSidebarOpen: boolean; children: React.ReactNode }) => (
+// Wrapper component for pages with sidebar
+const PageWrapper = ({
+  isSidebarOpen,
+  children,
+}: {
+  isSidebarOpen: boolean;
+  children: React.ReactNode;
+}) => (
   <main
     className="content"
     style={{

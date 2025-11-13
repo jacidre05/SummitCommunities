@@ -24,16 +24,57 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
   ];
 
   useEffect(() => {
+    // Close sidebar when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
-      if (!isOpen) return; // Only check when open
+      if (!isOpen) return;
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         closeSidebar();
       }
     };
-
-    document.addEventListener("click", handleClickOutside, true); // Use capture phase
+    document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [isOpen, closeSidebar]);
+
+  useEffect(() => {
+    // Mobile swipe detection
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      touchEndX = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchEnd = () => {
+      const diffX = touchEndX - touchStartX;
+
+      // Swipe right to open
+      if (diffX > 50) {
+        toggleSidebar();
+      }
+
+      // Swipe left to close
+      if (diffX < -50) {
+        closeSidebar();
+      }
+
+      touchStartX = 0;
+      touchEndX = 0;
+    };
+
+    document.addEventListener("touchstart", handleTouchStart);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [toggleSidebar, closeSidebar]);
 
   return (
     <aside ref={sidebarRef} className={`sidebar ${isOpen ? "expanded" : ""}`}>
