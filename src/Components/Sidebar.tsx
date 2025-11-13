@@ -20,11 +20,10 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
     { name: "Employment", path: "/Careers" },
     { name: "Video Gallery", path: "/Videos" },
     { name: "Contact Us", path: "/ContactUs" },
-    { name: "Tenant Portals", path: "/Portal" },
+    { name: "Tenant Portal", path: "/Portal" },
   ];
 
   useEffect(() => {
-    // Close sidebar when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
       if (!isOpen) return;
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
@@ -36,7 +35,6 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
   }, [isOpen, closeSidebar]);
 
   useEffect(() => {
-    // Mobile swipe detection
     let touchStartX = 0;
     let touchEndX = 0;
 
@@ -50,17 +48,8 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
 
     const handleTouchEnd = () => {
       const diffX = touchEndX - touchStartX;
-
-      // Swipe right to open
-      if (diffX > 50) {
-        toggleSidebar();
-      }
-
-      // Swipe left to close
-      if (diffX < -50) {
-        closeSidebar();
-      }
-
+      if (diffX > 50) toggleSidebar(); // swipe right
+      if (diffX < -50) closeSidebar(); // swipe left
       touchStartX = 0;
       touchEndX = 0;
     };
@@ -90,7 +79,19 @@ const Sidebar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, closeSidebar }
           </li>
           {menuItems.map((item) => (
             <li key={item.path} className={location.pathname === item.path ? "active" : ""}>
-              <Link to={item.path}>{item.name}</Link>
+              <Link
+                to={item.path}
+                onClick={() => {
+                  if (sidebarRef.current) {
+                    sidebarRef.current.classList.remove("expanded"); // trigger CSS animation
+                    setTimeout(() => {
+                      closeSidebar(); // update React state
+                    }, 300); // match CSS transition
+                  }
+                }}
+              >
+                {item.name}
+              </Link>
             </li>
           ))}
         </ul>
