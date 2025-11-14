@@ -1,6 +1,6 @@
 import React from "react";
 
-const Portals: React.FC = () => {
+const Portal: React.FC = () => {
   return (
     <div>
       <h1>About Us</h1>
@@ -9,4 +9,4 @@ const Portals: React.FC = () => {
   );
 };
 
-export default Portals;
+export default Portal;

@@ -8,5 +8,16 @@ export default defineConfig(({ mode }) => {
   return {
     base: basePath,
     plugins: [react()],
+    server: {
+      host: '0.0.0.0',  
+      port: 5173,
+      strictPort: true,
+      allowedHosts: [
+        'localhost',                        // local dev
+        '127.0.0.1',                        // WSL/ngrok local
+        'nonloyal-subcriminally-jamika.ngrok-free.dev', // your ngrok URL
+        // add more hosts or IPs as needed
+      ],
+    },
   };
 });

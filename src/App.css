@@ -1,46 +1,40 @@
 /* ========================
-   Sidebar
-======================== */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200px;           /* default sidebar width */
-  height: 100vh;
-  background-color: #222; /* example color */
-  z-index: 10;
-  transition: width 0.3s; /* for collapse animation */
-}
-
-/* ========================
-   Content container
+   MAIN CONTENT
 ======================== */
 .content {
   display: flex;
   flex-direction: column;
-  height: 100vh;          /* full viewport height */
-  margin-left: 200px;     /* space for sidebar */
-  width: calc(100% - 200px);
-  overflow: hidden;       /* prevent vertical scroll */
+  height: 100vh;
+  margin-left: 70px; /* default collapsed sidebar */
+  width: calc(100% - 70px);
+  transition: all 0.3s ease;
+  overflow: auto;
 }
 
-/* Collapsed sidebar adjustment (for elements below slider only) */
-.content.collapsed {
-  margin-left: 0;         /* optional: slider keeps same width */
-  width: calc(100% - 200px); /* do not shrink slider */
+.content.sidebar-expanded {
+  margin-left: 450px; /* expanded sidebar */
+  width: calc(100% - 450px);
 }
 
-/* Hamburger button overlay */
-.menu-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1500;
+/* Full width pages like Home */
+.content.full-width {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* ========================
+   MOBILE
+======================== */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    margin-top: 60px; /* top navbar height */
+    width: 100%;
+  }
+
+  .content.sidebar-expanded {
+    margin-left: 0;
+    margin-top: 60px;
+    width: 100%;
+  }
 }

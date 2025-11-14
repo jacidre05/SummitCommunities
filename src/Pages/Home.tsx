@@ -1,16 +1,16 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
 import "./Home.css";
-
-// Import images
 import BG1 from "./Components/BC.jpg";
-import BG2 from "./Components/ABG.png";
-import BG3 from "./Components/KABG.png";
+import BG2 from "./Components/HL.jpg";
+import BG3 from "./Components/Career.jpeg";
 import IMG from "./Components/SCLogo.png";
-import Sample from "./Components/Sample.png";
+import Slide1 from "./Components/home-slider1.png";
+import Slide2 from "./Components/home-slider2.png";
+import Slide3 from "./Components/home-slider3.png";
+import Slide4 from "./Components/home-slider4.png";
 
 const slides = [
   {
@@ -35,27 +35,27 @@ const slides = [
 
 const Home: React.FC = () => {
   const swiperRef = useRef<any>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const rafRef = useRef<number | null>(null);
 
-  // Get responsive parallax intensity
   const getParallaxIntensity = () => {
     const width = window.innerWidth;
-    if (width >= 1200) return 40; // bg horizontal shift
+    if (width >= 1200) return 40;
     if (width >= 768) return 25;
     return 15;
   };
 
   const getTextParallaxIntensity = () => {
     const width = window.innerWidth;
-    if (width >= 1200) return 30; // text vertical shift
+    if (width >= 1200) return 30;
     if (width >= 768) return 20;
     return 10;
   };
 
+  // Parallax
   useEffect(() => {
     const animateParallax = () => {
       if (!swiperRef.current) return;
-
       const bgIntensity = getParallaxIntensity();
       const textIntensity = getTextParallaxIntensity();
 
@@ -65,22 +65,12 @@ const Home: React.FC = () => {
 
         if (bg) {
           const progress = slideEl.progress as number;
-          const currentTransform = parseFloat(
-            bg.style.transform.replace("translateX(", "").replace("px)", "")
-          ) || 0;
-          const targetTransform = progress * bgIntensity;
-          const newTransform = currentTransform + (targetTransform - currentTransform) * 0.1;
-          bg.style.transform = `translateX(${newTransform}px)`;
+          bg.style.transform = `translateX(${progress * bgIntensity}px)`;
         }
 
         if (text) {
           const progress = slideEl.progress as number;
-          const currentY = parseFloat(
-            text.style.transform.replace("translateY(", "").replace("px)", "")
-          ) || 0;
-          const targetY = progress * textIntensity;
-          const newY = currentY + (targetY - currentY) * 0.1;
-          text.style.transform = `translateY(${newY}px)`;
+          text.style.transform = `translateY(${progress * textIntensity}px)`;
         }
       });
 
@@ -94,16 +84,21 @@ const Home: React.FC = () => {
     };
   }, []);
 
+  // Update active index when slide changes
+  const onSlideChange = (swiper: any) => {
+    setActiveIndex(swiper.realIndex);
+  };
+
   return (
     <>
       <div className="slider-container">
         <Swiper
-          modules={[Autoplay, Pagination]}
+          modules={[Autoplay]}
           speed={800}
           autoplay={{ delay: 5000, disableOnInteraction: false }}
-          pagination={{ clickable: true }}
           loop
           onSwiper={(swiper) => (swiperRef.current = swiper)}
+          onSlideChange={onSlideChange}
         >
           {slides.map((slide, index) => (
             <SwiperSlide key={index}>
@@ -132,18 +127,59 @@ const Home: React.FC = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/* React-based custom pagination */}
+        <div className="custom-pagination">
+          {slides.map((_, index) => (
+            <span
+              key={index}
+              className={`custom-bullet ${index === activeIndex ? "active" : ""}`}
+              onClick={() => swiperRef.current.slideToLoop(index)}
+            >
+              {index < 9 ? `0${index + 1}` : index + 1}
+            </span>
+          ))}
+          <div
+            className="custom-line"
+            style={{
+              width: `${100 / slides.length}%`,
+              transform: `translateX(${activeIndex * 100}%)`,
+            }}
+          />
+        </div>
       </div>
 
       <section className="image-text-section">
         <div className="image-container">
-          <img src={Sample} alt="Sample" />
+          <Swiper
+            modules={[Autoplay]}
+            speed={800}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
+            loop
+            spaceBetween={10}
+          >
+            {[Slide1, Slide2, Slide3, Slide4].map((imgSrc, index) => (
+              <SwiperSlide key={index}>
+                <img src={imgSrc} alt={`Slide ${index + 1}`} />
+              </SwiperSlide>
+            ))}
+        </Swiper>
         </div>
         <div className="text-container">
-          <h2>About Our Community</h2>
+          <h2>Next Level of Living</h2>
+          <div className="text-separator"></div>
           <p>
-            Summit Communities is committed to creating modern, sustainable,
-            and vibrant communities where people can thrive. Join us to explore
-            opportunities and experience our unique developments.
+            At Summit Communities, we exist to meet the human condition by providing clean, quality housing to the masses. We are focused on responsive management, understanding life challenges and providing compassion when working with applicants, and offering freshly renovated units with in-unit washer and dryer.
+          <ul>
+            <li>Albion Apartments</li>
+            <li>Arboreta Apartments</li>
+            <li>Boulder Crossroads</li>
+            <li>Knight Apartments</li>
+            <li>Sunlight Townhomes</li>
+            <li>Highland Way Apartments</li>
+            <li>Meadows at Town Center</li>
+            <li>Sierra Vista</li>
+          </ul>
           </p>
         </div>
       </section>

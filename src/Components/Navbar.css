@@ -1,0 +1,183 @@
+/* ----------------- NAVBAR ----------------- */
+.navbar-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-bottom: 1px solid #e5e7eb;
+    transition: transform 0.3s ease-in-out; /* smooth hide/show */
+}
+
+.navbar-header.hidden {
+    transform: translateY(-100%); /* hide above viewport */
+}
+
+.navbar-header.visible {
+    transform: translateY(0); /* show */
+}
+
+.navbar-nav {
+    padding: 0.5rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-logo-container {
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-logo {
+    height: 100%;
+    width: auto;
+}
+
+/* ----------------- MENU BUTTON (2-LINES THINNER & CLOSER) ----------------- */
+.menu-button {
+    position: relative;
+    width: 30px;
+    height: 10px;           /* shorter height to bring lines closer */
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    z-index: 50;
+    margin-right: 2rem;
+
+    outline: none;
+    box-shadow: none;
+
+    /* Remove mobile tap highlight */
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-focus-ring-color: transparent;
+    touch-action: manipulation; 
+}
+
+.menu-button::before,
+.menu-button::after {
+    content: "";
+    display: block;
+    height: 2px;            /* thin lines */
+    width: 100%;
+    background-color: #4b5563;
+    border-radius: 1px;     /* rounded edges */
+    transition: all 0.3s ease;
+}
+
+.menu-button:focus,
+.menu-button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Animate to X when menu is open */
+.menu-button.open::before {
+    transform: rotate(45deg) translate(4px, 2px);
+    width: 100%;
+}
+
+.menu-button.open::after {
+    transform: rotate(-45deg) translate(4px, -1px);
+    width: 100%;
+}
+
+/* ----------------- DROPDOWN MENU ----------------- */
+.dropdown-menu {
+    position: absolute;
+    top: 100%; /* directly below navbar */
+    left: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: max-height 400ms ease-in-out, opacity 400ms ease-in-out;
+    border-top: 1px solid #e5e7eb;
+    opacity: 0;
+    max-height: 0;
+    z-index: 30;
+}
+
+.dropdown-menu.open {
+    opacity: 1;
+    max-height: 500px; /* adjust as needed */
+}
+
+.menu-list {
+    list-style: none;
+    padding: 1rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    border-radius: 0.5rem;
+    transition: background-color 200ms ease-in-out;
+    background-color: transparent;
+    opacity: 0; /* will animate in */
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 0;
+}
+
+.menu-list .nav-item:last-child {
+    border-bottom: none;
+}
+
+/* Staggered slide-in animation */
+.dropdown-menu.open .nav-item {
+    animation: slideIn 300ms ease-out forwards;
+}
+
+.dropdown-menu.open .nav-item:nth-child(1) { animation-delay: 100ms; }
+.dropdown-menu.open .nav-item:nth-child(2) { animation-delay: 150ms; }
+.dropdown-menu.open .nav-item:nth-child(3) { animation-delay: 200ms; }
+.dropdown-menu.open .nav-item:nth-child(4) { animation-delay: 250ms; }
+.dropdown-menu.open .nav-item:nth-child(5) { animation-delay: 300ms; }
+.dropdown-menu.open .nav-item:nth-child(6) { animation-delay: 350ms; }
+.dropdown-menu.open .nav-item:nth-child(7) { animation-delay: 400ms; }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-link {
+    display: block;
+    padding: 0.75rem;
+    width: 100%;
+    text-decoration: none;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.nav-item:hover:not(.active) {
+    background-color: #f9fafb;
+}
+
+.nav-item.active {
+    background-color: transparent;
+    font-weight: 600;
+}
+
+.nav-item.active .nav-link {
+    color: #964b00;
+    font-weight: 700;
+    border-bottom: 2px solid #f5e3cc;
+    padding-bottom: 0.5rem;
+}
+
+/* Hide navbar on large screens if needed */
+@media (min-width: 1024px) {
+    .navbar-header {
+        display: none;
+    }
+}
